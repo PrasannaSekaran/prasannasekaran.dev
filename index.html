@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Prasanna Sekaran — AI Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#04040a;--surface:#080812;--border:rgba(255,255,255,0.06);
+  --text:#ede9de;--muted:rgba(237,233,222,0.4);--accent:#c8f542;--teal:#3dffd2;
+  --red:#ff4060;--green:#c8f542;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;overflow-x:hidden;cursor:none;}
+
+/* ── CURSOR ── */
+#cur{position:fixed;width:10px;height:10px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference;transition:width .25s,height .25s;}
+#cur.big{width:54px;height:54px;}
+#cur-arr{position:fixed;pointer-events:none;z-index:10000;font-size:.68rem;color:var(--bg);opacity:0;transform:translate(-50%,-50%);transition:opacity .2s;font-family:'DM Mono',monospace;}
+#cur-arr.show{opacity:1;}
+
+/* ── SPINE ── */
+#spine{position:fixed;left:46px;top:0;bottom:0;width:1px;z-index:50;pointer-events:none;}
+#spine-line{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 0%,rgba(200,245,66,.13) 6%,rgba(200,245,66,.13) 94%,transparent 100%);}
+/* Bead is positioned by JS only, no CSS animation */
+#spine-glow{
+  position:absolute;left:-6px;width:13px;height:90px;
+  background:linear-gradient(to bottom,transparent,var(--accent),transparent);
+  border-radius:50%;filter:blur(3px);top:0;
+}
+#spine-bead{
+  position:absolute;left:-4px;top:0;width:9px;height:9px;
+  background:var(--accent);border-radius:50%;
+  box-shadow:0 0 12px var(--accent),0 0 24px rgba(200,245,66,.4);
+  margin-left:0px;
+}
+.stk{position:fixed;left:40px;width:12px;height:1px;background:var(--accent);opacity:.2;z-index:51;pointer-events:none;transition:opacity .3s,width .3s;}
+.stk.lit{opacity:1;width:20px;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:200;padding:26px 80px;display:flex;justify-content:space-between;align-items:center;transition:background .4s,border-color .4s;border-bottom:1px solid transparent;}
+nav.ink{background:rgba(4,4,10,.92);border-color:var(--border);backdrop-filter:blur(18px);}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.22em;color:var(--accent);text-decoration:none;margin-left:14px;}
+.nl{display:flex;gap:34px;list-style:none;}
+.nl a{color:var(--muted);text-decoration:none;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;transition:color .2s;cursor:none;}
+.nl a:hover{color:var(--accent);}
+
+/* NOISE */
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");pointer-events:none;z-index:9990;opacity:.5;}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:grid;grid-template-rows:1fr auto;padding:0 80px 56px;position:relative;overflow:hidden;}
+.hgrid{position:absolute;inset:0;background-image:linear-gradient(rgba(200,245,66,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(200,245,66,.03) 1px,transparent 1px);background-size:75px 75px;}
+.orb{position:absolute;border-radius:50%;pointer-events:none;}
+.o1{width:650px;height:650px;right:-180px;top:-180px;background:radial-gradient(circle,rgba(200,245,66,.09) 0%,transparent 65%);animation:ob 14s ease-in-out infinite;}
+.o2{width:440px;height:440px;left:200px;bottom:-120px;background:radial-gradient(circle,rgba(61,255,210,.06) 0%,transparent 65%);animation:ob 18s ease-in-out infinite reverse;}
+@keyframes ob{0%,100%{transform:translate(0,0);}50%{transform:translate(28px,-28px);}}
+
+.hcontent{display:flex;flex-direction:column;justify-content:flex-end;padding-top:120px;position:relative;z-index:2;}
+.h-eye{display:flex;align-items:center;gap:10px;font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);margin-bottom:38px;}
+.h-eye::before{content:'';width:7px;height:7px;background:var(--accent);border-radius:50%;animation:bk 2s ease-in-out infinite;}
+@keyframes bk{0%,100%{opacity:1;}50%{opacity:0;}}
+
+.hname{font-family:'Bebas Neue',sans-serif;font-size:clamp(88px,15.5vw,215px);line-height:.87;letter-spacing:-.01em;}
+.hname .n1{display:block;color:var(--text);transform:translateY(70px);opacity:0;transition:transform 1s cubic-bezier(.16,1,.3,1) .1s,opacity .8s .1s;}
+.hname .n2{display:block;color:transparent;-webkit-text-stroke:1px rgba(237,233,222,.16);transform:translateY(70px);opacity:0;transition:transform 1s cubic-bezier(.16,1,.3,1) .22s,opacity .8s .22s;}
+.hname.up .n1,.hname.up .n2{transform:translateY(0);opacity:1;}
+
+.hrole{margin-top:34px;display:flex;align-items:center;gap:18px;opacity:0;transform:translateY(16px);transition:opacity .8s .46s,transform .8s .46s;}
+.hrole.up{opacity:1;transform:translateY(0);}
+.rl{width:44px;height:1px;background:var(--muted);}
+.rtext{font-family:'Fraunces',serif;font-size:clamp(17px,2vw,26px);font-style:italic;font-weight:300;color:var(--muted);}
+.rtext em{color:var(--text);font-style:normal;}
+
+.hfoot{display:flex;justify-content:space-between;align-items:flex-end;position:relative;z-index:2;}
+.hpassion{max-width:360px;font-size:.73rem;line-height:1.88;color:var(--muted);opacity:0;transition:opacity .8s .68s;}
+.hpassion.up{opacity:1;}
+.hpassion strong{color:var(--accent);}
+.hcta{display:flex;gap:11px;opacity:0;transition:opacity .8s .84s;}
+.hcta.up{opacity:1;}
+.btn{padding:13px 28px;font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;cursor:none;border:none;transition:all .22s;display:inline-block;}
+.bf{background:var(--accent);color:var(--bg);}
+.bf:hover{background:#d5ff52;transform:translateY(-2px);}
+.bg{border:1px solid var(--border);color:var(--muted);}
+.bg:hover{border-color:var(--accent);color:var(--accent);}
+
+.scroll-h{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--muted);font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;opacity:0;transition:opacity 1s 1.1s;}
+.scroll-h.up{opacity:1;}
+.sp{width:1px;height:48px;background:rgba(255,255,255,.08);position:relative;overflow:hidden;}
+.sp::after{content:'';position:absolute;top:-100%;left:0;right:0;height:100%;background:var(--accent);animation:sf 2s ease-in-out infinite;}
+@keyframes sf{0%{top:-100%;}100%{top:200%;}}
+
+/* ── MARQUEE ── */
+.mwrap{overflow:hidden;border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:11px 0;background:var(--surface);}
+.mtrack{display:flex;gap:0;white-space:nowrap;animation:mq 28s linear infinite;}
+.mi{display:inline-flex;align-items:center;gap:22px;padding:0 28px;font-size:.6rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);flex-shrink:0;}
+.md{width:3px;height:3px;background:var(--accent);border-radius:50%;}
+@keyframes mq{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ── SECTIONS ── */
+.sec{padding:116px 80px;position:relative;border-top:1px solid var(--border);}
+.si{max-width:1180px;margin:0 auto;}
+.slabel{font-size:.56rem;letter-spacing:.24em;text-transform:uppercase;color:var(--accent);margin-bottom:26px;display:flex;align-items:center;gap:14px;}
+.slabel::before{content:'';width:26px;height:1px;background:var(--accent);}
+.stitle{font-family:'Fraunces',serif;font-size:clamp(36px,4.8vw,68px);line-height:1.06;font-weight:800;letter-spacing:-.02em;}
+.stitle em{color:var(--accent);font-style:italic;}
+
+/* reveals */
+.r{opacity:0;transform:translateY(28px);transition:opacity .8s,transform .8s;}
+.r.d1{transition-delay:.1s;}.r.d2{transition-delay:.2s;}.r.d3{transition-delay:.3s;}.r.d4{transition-delay:.4s;}
+.r.on{opacity:1;transform:translateY(0);}
+
+/* ── PASSION ── */
+.passion-sec{background:var(--bg);}
+.pgrid{margin-top:68px;display:grid;grid-template-columns:1fr 1fr;gap:3px;}
+.pcard{padding:50px 42px;background:var(--surface);border:1px solid var(--border);position:relative;overflow:hidden;cursor:none;transition:border-color .3s;}
+.pcard:hover{border-color:rgba(200,245,66,.32);}
+.pcard::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 0% 100%,rgba(200,245,66,.055) 0%,transparent 60%);opacity:0;transition:opacity .4s;}
+.pcard:hover::before{opacity:1;}
+.pcard.wide{grid-column:1/-1;}
+.pc-ico{width:36px;height:36px;margin-bottom:22px;display:block;color:var(--accent);flex-shrink:0;}
+.pc-h{font-family:'Fraunces',serif;font-size:1.4rem;font-weight:800;margin-bottom:12px;line-height:1.2;}
+.pc-p{font-size:.73rem;line-height:1.88;color:var(--muted);}
+.pc-p strong{color:var(--text);}
+.pc-n{position:absolute;bottom:16px;right:24px;font-family:'Bebas Neue',sans-serif;font-size:4.5rem;color:rgba(200,245,66,.045);line-height:1;pointer-events:none;}
+
+/* ── DOMAINS ── */
+.dom-sec{background:var(--surface);}
+.dlist{margin-top:68px;display:flex;flex-direction:column;gap:2px;}
+.ditem{border:1px solid var(--border);display:grid;grid-template-columns:72px 1fr auto;align-items:stretch;overflow:hidden;cursor:none;transition:border-color .3s;position:relative;}
+.ditem::after{content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(200,245,66,.03);transition:width .45s;pointer-events:none;}
+.ditem:hover{border-color:var(--accent);}
+.ditem:hover::after{width:100%;}
+.dnum{padding:28px 16px;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:rgba(200,245,66,.22);border-right:1px solid var(--border);text-align:center;position:relative;z-index:1;display:flex;align-items:center;justify-content:center;}
+.dcont{padding:26px 38px;position:relative;z-index:1;}
+.dname{font-family:'Fraunces',serif;font-size:1.3rem;font-weight:700;margin-bottom:7px;}
+.ddesc{font-size:.68rem;color:var(--muted);line-height:1.7;}
+.dright{padding:20px 24px;display:flex;flex-direction:column;gap:10px;align-items:flex-end;justify-content:center;max-width:340px;position:relative;z-index:1;}
+.dtags{display:flex;flex-wrap:wrap;gap:7px;justify-content:flex-end;}
+.dtag{padding:4px 11px;border:1px solid var(--border);font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);transition:all .2s;}
+.ditem:hover .dtag{border-color:rgba(200,245,66,.25);color:var(--accent);}
+
+/* Candlestick chart in quant domain */
+.candle-mini{width:100%;margin-top:8px;}
+
+/* ── SKILLS ── */
+.skills-sec{background:var(--bg);}
+.slayout{margin-top:68px;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start;}
+.sintro{font-family:'Fraunces',serif;font-size:1rem;font-style:italic;line-height:1.9;color:var(--muted);margin-bottom:44px;}
+.sintro em{color:var(--text);font-style:normal;}
+.sbars{display:flex;flex-direction:column;gap:20px;}
+.sbar-h{display:flex;justify-content:space-between;font-size:.58rem;letter-spacing:.1em;color:var(--muted);margin-bottom:7px;}
+.sbar-t{height:1px;background:rgba(255,255,255,.07);position:relative;}
+.sbar-f{height:1px;background:var(--accent);width:0;transition:width 1.7s cubic-bezier(.25,1,.5,1);position:relative;}
+.sbar-f::after{content:'';position:absolute;right:-4px;top:-4px;width:9px;height:9px;background:var(--accent);border-radius:50%;box-shadow:0 0 10px var(--accent);}
+.sright{display:grid;grid-template-columns:1fr 1fr;gap:3px;}
+.scb{padding:26px 22px;background:var(--surface);border:1px solid var(--border);transition:border-color .3s;}
+.scb:hover{border-color:rgba(200,245,66,.28);}
+.scb-l{font-size:.53rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;}
+.scb-items{display:flex;flex-direction:column;gap:5px;}
+.scb-i{font-size:.6rem;color:var(--muted);transition:color .2s;line-height:1.5;}
+.scb:hover .scb-i{color:var(--text);}
+
+/* ── ABOUT ── */
+.about-sec{background:var(--surface);}
+.alayout{margin-top:68px;display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start;}
+.atext p{font-family:'Fraunces',serif;font-size:1rem;font-style:italic;font-weight:300;line-height:1.92;color:var(--muted);margin-bottom:24px;}
+.atext p strong{color:var(--text);font-style:normal;font-weight:700;}
+.irows{display:flex;flex-direction:column;gap:2px;}
+.irow{display:grid;grid-template-columns:130px 1fr;border:1px solid var(--border);}
+.ik{padding:16px 18px;background:var(--bg);font-size:.57rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);border-right:1px solid var(--border);display:flex;align-items:center;}
+.iv{padding:16px 22px;font-size:.7rem;color:var(--text);display:flex;align-items:center;}
+.sstrip{margin-top:56px;display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);}
+.scell{padding:28px 16px;text-align:center;border-right:1px solid var(--border);transition:background .3s;cursor:none;}
+.scell:last-child{border-right:none;}
+.scell:hover{background:rgba(200,245,66,.04);}
+.sn{font-family:'Bebas Neue',sans-serif;font-size:2.8rem;color:var(--accent);line-height:1;}
+.sl{font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:7px;}
+
+/* ── EXPERIENCE ── */
+.etl{margin-top:72px;display:flex;flex-direction:column;gap:2px;}
+.eblock{border:1px solid var(--border);display:grid;grid-template-columns:170px 1fr;overflow:hidden;cursor:none;transition:border-color .3s;position:relative;}
+.eblock::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--accent);transform:scaleY(0);transform-origin:top;transition:transform .4s;}
+.eblock:hover{border-color:rgba(200,245,66,.3);}
+.eblock:hover::before{transform:scaleY(1);}
+.el{padding:32px 22px;background:var(--bg);border-right:1px solid var(--border);}
+.ep{font-size:.58rem;letter-spacing:.1em;color:var(--muted);line-height:1.7;}
+.eco{font-family:'Fraunces',serif;font-weight:800;font-size:.95rem;margin-top:10px;color:var(--accent);}
+.er{padding:32px 38px;}
+.erole{font-family:'Fraunces',serif;font-size:1.4rem;font-weight:700;margin-bottom:5px;}
+.etag{font-size:.62rem;color:var(--muted);margin-bottom:18px;font-style:italic;}
+.epills{display:flex;flex-wrap:wrap;gap:7px;}
+.epill{padding:4px 12px;border:1px solid var(--border);font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);transition:all .2s;}
+.eblock:hover .epill{border-color:rgba(200,245,66,.2);color:var(--text);}
+
+/* ── CONTACT ── */
+.csec{background:var(--bg);min-height:75vh;display:flex;flex-direction:column;justify-content:center;text-align:center;padding:120px 80px;position:relative;overflow:hidden;}
+.cbg{position:absolute;font-family:'Bebas Neue',sans-serif;font-size:26vw;line-height:1;color:transparent;-webkit-text-stroke:1px rgba(200,245,66,.04);user-select:none;pointer-events:none;white-space:nowrap;top:50%;left:50%;transform:translate(-50%,-50%);}
+.csec .slabel{justify-content:center;}
+.csec .stitle{margin:18px auto 44px;max-width:660px;}
+.cgrid{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+.clink{display:flex;align-items:center;justify-content:center;padding:14px 30px;border:1px solid var(--border);color:var(--text);text-decoration:none;font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;cursor:none;transition:all .22s;position:relative;z-index:1;}
+.clink:hover{border-color:var(--accent);color:var(--accent);background:rgba(200,245,66,.04);}
+.clink svg{flex-shrink:0;transition:color .22s;}
+.clink-icon{padding:20px;width:64px;height:64px;border-radius:50%;}
+.clink-icon:hover{border-color:var(--accent);color:var(--accent);background:rgba(200,245,66,.06);transform:translateY(-4px);box-shadow:0 8px 24px rgba(200,245,66,.12);}
+
+/* ── FOOTER ── */
+footer{border-top:1px solid var(--border);padding:22px 80px;display:flex;justify-content:space-between;align-items:center;font-size:.56rem;letter-spacing:.1em;color:var(--muted);}
+.fd{color:var(--accent);}
+
+
+
+@media(max-width:900px){
+  nav{padding:20px 30px;}.nl{display:none;}
+  #spine{left:18px;}
+  .sec,.hero{padding-left:46px;padding-right:22px;}
+  .pgrid,.slayout,.alayout{grid-template-columns:1fr;}
+  .pcard.wide{grid-column:auto;}
+  .sstrip{grid-template-columns:1fr 1fr;}
+  .eblock{grid-template-columns:1fr;}
+  .ditem{grid-template-columns:50px 1fr;}.dright{display:none;}
+  footer{flex-direction:column;gap:10px;text-align:center;}
+  .ticker-bar{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-arr"></div>
+
+<!-- ── SPINE ── -->
+<div id="spine">
+  <div id="spine-line"></div>
+  <div id="spine-glow"></div>
+  <div id="spine-bead"></div>
+</div>
+<div class="stk" id="t0" style="top:18%"></div>
+<div class="stk" id="t1" style="top:34%"></div>
+<div class="stk" id="t2" style="top:51%"></div>
+<div class="stk" id="t3" style="top:68%"></div>
+<div class="stk" id="t4" style="top:84%"></div>
+
+<!-- ── NAV ── -->
+<nav id="nav">
+  <a class="logo" href="#">PS</a>
+  <ul class="nl">
+    <li><a href="#passion">Passion</a></li>
+    <li><a href="#domains">Domains</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hgrid"></div>
+  <div class="orb o1"></div>
+  <div class="orb o2"></div>
+
+  <div class="hcontent">
+    <div class="h-eye">AI Engineer · Chennai, IN · Open to Opportunities</div>
+    <div class="hname" id="HN">
+      <span class="n1">PRASANNA</span>
+      <span class="n2">SEKARAN</span>
+    </div>
+    <div class="hrole" id="HR">
+      <div class="rl"></div>
+      <div class="rtext">Building <em>autonomous AI</em> that solves real problems.</div>
+    </div>
+  </div>
+
+  <div class="hfoot">
+    <p class="hpassion" id="HP">
+      I believe AI Agents are the next great leap — systems that <strong>think, plan, and act</strong> without hand-holding. My obsession is making that real, at scale, in finance and beyond.
+    </p>
+    <div class="hcta" id="HC">
+      <a href="mailto:prasannasekaran2002@gmail.com" class="btn bf">Get in Touch</a>
+      <a href="#passion" class="btn bg">Explore →</a>
+    </div>
+  </div>
+
+  <div class="scroll-h" id="SH"><span>Scroll</span><div class="sp"></div></div>
+</section>
+
+<!-- ── MARQUEE ── -->
+<div class="mwrap">
+  <div class="mtrack">
+    <span class="mi"><span class="md"></span>AI Agents</span>
+    <span class="mi"><span class="md"></span>LLM Engineering</span>
+    <span class="mi"><span class="md"></span>RAG Systems</span>
+    <span class="mi"><span class="md"></span>Fine-Tuning</span>
+    <span class="mi"><span class="md"></span>Agentic AI</span>
+    <span class="mi"><span class="md"></span>Knowledge Graphs</span>
+    <span class="mi"><span class="md"></span>Quantitative Finance</span>
+    <span class="mi"><span class="md"></span>Vector Databases</span>
+    <span class="mi"><span class="md"></span>Multi-Agent Systems</span>
+    <span class="mi"><span class="md"></span>Real-Time ML</span>
+    <span class="mi"><span class="md"></span>AI Agents</span>
+    <span class="mi"><span class="md"></span>LLM Engineering</span>
+    <span class="mi"><span class="md"></span>RAG Systems</span>
+    <span class="mi"><span class="md"></span>Fine-Tuning</span>
+    <span class="mi"><span class="md"></span>Agentic AI</span>
+    <span class="mi"><span class="md"></span>Knowledge Graphs</span>
+    <span class="mi"><span class="md"></span>Quantitative Finance</span>
+    <span class="mi"><span class="md"></span>Vector Databases</span>
+    <span class="mi"><span class="md"></span>Multi-Agent Systems</span>
+    <span class="mi"><span class="md"></span>Real-Time ML</span>
+  </div>
+</div>
+
+<!-- ── PASSION ── -->
+<section class="sec passion-sec" id="passion">
+  <div class="si">
+    <div class="slabel r">What Drives Me</div>
+    <h2 class="stitle r d1">I don't just build AI.<br>I build AI that <em>acts.</em></h2>
+    <div class="pgrid">
+
+      <div class="pcard wide r d2">
+        <!-- Icon: lightning bolt / agent -->
+        <svg class="pc-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+        </svg>
+        <div class="pc-h">AI Agents That Change Things</div>
+        <div class="pc-p">My deepest conviction: <strong>the most powerful software of our era won't be written by humans</strong> — it'll be orchestrated by AI agents that plan, reason, retrieve, and execute autonomously. I wake up thinking about how to build systems like that. Not demos. Not proofs-of-concept. <strong>Production agents that make a tangible difference</strong> in how people invest, decide, and operate at scale.</div>
+        <div class="pc-n">01</div>
+      </div>
+
+      <div class="pcard r d1">
+        <!-- Icon: brain / CPU -->
+        <svg class="pc-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/>
+          <line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/>
+          <line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/>
+          <line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/>
+          <line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/>
+        </svg>
+        <div class="pc-h">LLMs as Reasoning Engines</div>
+        <div class="pc-p">LLMs aren't chatbots to me — they're <strong>reasoning engines</strong>. I'm obsessed with prompting them at their limits: structured outputs, tool calling, chain-of-thought, multi-hop retrieval. Getting an LLM to consistently produce <strong>trustworthy, grounded decisions</strong> is the hardest and most rewarding engineering challenge I know.</div>
+        <div class="pc-n">02</div>
+      </div>
+
+      <div class="pcard r d2">
+        <!-- Icon: candlestick chart -->
+        <svg class="pc-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="3" x2="18" y2="6"/><line x1="18" y1="14" x2="18" y2="21"/>
+          <line x1="6" y1="3" x2="6" y2="8"/><line x1="6" y1="16" x2="6" y2="21"/>
+          <rect x="14" y="6" width="8" height="8" rx="1"/>
+          <rect x="2" y="8" width="8" height="8" rx="1"/>
+        </svg>
+        <div class="pc-h">Finance as the Ultimate Test Bed</div>
+        <div class="pc-p">Finance is <strong>unforgiving data</strong>. Noisy signals, adversarial markets, lagging information — if your AI works here, it works anywhere. I'm passionate about applying LLMs and ML to markets not just to predict, but to <strong>understand, explain, and act</strong> on financial complexity at scale.</div>
+        <div class="pc-n">03</div>
+      </div>
+
+      <div class="pcard r d1">
+        <!-- Icon: target / impact -->
+        <svg class="pc-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
+        </svg>
+        <div class="pc-h">Real Impact, Not Just Research</div>
+        <div class="pc-p">I'm not interested in AI for the sake of AI. Every system I build has a <strong>real human on the other end</strong> — an investor needing clarity, a patient needing guidance, a team needing efficiency. That responsibility sharpens everything I build.</div>
+        <div class="pc-n">04</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── DOMAINS ── -->
+<section class="sec dom-sec" id="domains">
+  <div class="si">
+    <div class="slabel r">What I Work In</div>
+    <h2 class="stitle r d1">Domains of<br><em>depth.</em></h2>
+    <div class="dlist">
+
+      <div class="ditem r">
+        <div class="dnum">01</div>
+        <div class="dcont">
+          <div class="dname">Agentic AI & LLM Engineering</div>
+          <div class="ddesc">Autonomous systems that plan, reason, and use tools. Multi-agent orchestration, function calling, chain-of-thought, and structured output pipelines that work reliably in production.</div>
+        </div>
+        <div class="dright">
+          <div class="dtags"><span class="dtag">Multi-Agent</span><span class="dtag">Tool Use</span><span class="dtag">Ollama</span><span class="dtag">LangChain</span><span class="dtag">LlamaIndex</span></div>
+        </div>
+      </div>
+
+      <div class="ditem r d1">
+        <div class="dnum">02</div>
+        <div class="dcont">
+          <div class="dname">RAG Systems & Knowledge Retrieval</div>
+          <div class="ddesc">Hybrid, Graph, and PageIndex RAG architectures. Semantic search, embeddings pipelines, and vector databases that retrieve the right context at the right moment — across thousands of documents.</div>
+        </div>
+        <div class="dright">
+          <div class="dtags"><span class="dtag">pgVector</span><span class="dtag">FAISS</span><span class="dtag">Pinecone</span><span class="dtag">Hybrid RAG</span><span class="dtag">Graph RAG</span></div>
+        </div>
+      </div>
+
+      <div class="ditem r d1">
+        <div class="dnum">03</div>
+        <div class="dcont">
+          <div class="dname">LLM Fine-Tuning</div>
+          <div class="ddesc">Adapting foundation models to domain-specific tasks using LoRA, QLoRA, PEFT, and Unsloth. Making models sharper, leaner, and faster for specialized financial and analytical workloads.</div>
+        </div>
+        <div class="dright">
+          <div class="dtags"><span class="dtag">LoRA</span><span class="dtag">QLoRA</span><span class="dtag">PEFT</span><span class="dtag">Unsloth</span><span class="dtag">HuggingFace</span></div>
+        </div>
+      </div>
+
+      <!-- QUANT — has candlestick visual -->
+      <div class="ditem r d2">
+        <div class="dnum">04</div>
+        <div class="dcont">
+          <div class="dname">Quantitative Finance & AI Trading</div>
+          <div class="ddesc">AI-driven quant strategies combining technical indicators with LLM signal generation — multi-agent systems producing live BUY/SELL/HOLD decisions across hundreds of stocks in real time.</div>
+        </div>
+        <div class="dright">
+          <div class="dtags"><span class="dtag">MACD</span><span class="dtag">RSI</span><span class="dtag">VWAP</span><span class="dtag">BSE/NSE</span><span class="dtag">Signals</span></div>
+          <!-- mini candlestick SVG -->
+          <svg class="candle-mini" viewBox="0 0 220 72" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="cg" width="20" height="20" patternUnits="userSpaceOnUse">
+                <path d="M20 0L0 0 0 20" fill="none" stroke="rgba(200,245,66,0.07)" stroke-width="0.5"/>
+              </pattern>
+            </defs>
+            <rect width="220" height="72" fill="url(#cg)"/>
+            <!-- axis -->
+            <line x1="10" y1="65" x2="210" y2="65" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+
+            <!-- green candles -->
+            <g>
+              <!-- wick -->
+              <line x1="22" y1="12" x2="22" y2="50" stroke="#c8f542" stroke-width="0.8"/>
+              <rect x="18" y="28" width="8" height="22" fill="#c8f542" opacity="0.9" rx="0.5"/>
+
+              <line x1="44" y1="8" x2="44" y2="40" stroke="#c8f542" stroke-width="0.8"/>
+              <rect x="40" y="16" width="8" height="20" fill="#c8f542" opacity="0.9" rx="0.5"/>
+
+              <line x1="88" y1="10" x2="88" y2="42" stroke="#c8f542" stroke-width="0.8"/>
+              <rect x="84" y="18" width="8" height="18" fill="#c8f542" opacity="0.9" rx="0.5"/>
+
+              <line x1="132" y1="6" x2="132" y2="34" stroke="#c8f542" stroke-width="0.8"/>
+              <rect x="128" y="12" width="8" height="18" fill="#c8f542" opacity="0.9" rx="0.5"/>
+
+              <line x1="176" y1="4" x2="176" y2="30" stroke="#c8f542" stroke-width="0.8"/>
+              <rect x="172" y="10" width="8" height="16" fill="#c8f542" opacity="0.9" rx="0.5"/>
+
+              <line x1="198" y1="2" x2="198" y2="28" stroke="#c8f542" stroke-width="0.8"/>
+              <rect x="194" y="8" width="8" height="16" fill="#c8f542" opacity="0.9" rx="0.5"/>
+            </g>
+            <!-- red candles -->
+            <g>
+              <line x1="66" y1="14" x2="66" y2="46" stroke="#ff4060" stroke-width="0.8"/>
+              <rect x="62" y="22" width="8" height="20" fill="#ff4060" opacity="0.9" rx="0.5"/>
+
+              <line x1="110" y1="12" x2="110" y2="40" stroke="#ff4060" stroke-width="0.8"/>
+              <rect x="106" y="18" width="8" height="18" fill="#ff4060" opacity="0.9" rx="0.5"/>
+
+              <line x1="154" y1="8" x2="154" y2="34" stroke="#ff4060" stroke-width="0.8"/>
+              <rect x="150" y="14" width="8" height="16" fill="#ff4060" opacity="0.9" rx="0.5"/>
+            </g>
+            <!-- BUY signal markers -->
+            <g fill="#c8f542" opacity="0.7">
+              <polygon points="22,56 18,63 26,63"/>
+              <polygon points="132,40 128,47 136,47"/>
+              <polygon points="198,32 194,39 202,39"/>
+            </g>
+            <!-- label -->
+            <text x="10" y="71" font-size="5.5" fill="rgba(200,245,66,0.5)" font-family="DM Mono, monospace" letter-spacing="0.08em">LIVE SIGNAL ACTIVE</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="ditem r d2">
+        <div class="dnum">05</div>
+        <div class="dcont">
+          <div class="dname">Machine Learning & Predictive Systems</div>
+          <div class="ddesc">Classification, regression, time series, anomaly detection — applied to live financial data, user behavior, and logistics. Feature engineering and model deployment in production environments.</div>
+        </div>
+        <div class="dright">
+          <div class="dtags"><span class="dtag">Scikit-learn</span><span class="dtag">TensorFlow</span><span class="dtag">PyTorch</span><span class="dtag">Time Series</span></div>
+        </div>
+      </div>
+
+      <div class="ditem r d3">
+        <div class="dnum">06</div>
+        <div class="dcont">
+          <div class="dname">Data Engineering & Unstructured Pipelines</div>
+          <div class="ddesc">End-to-end pipelines from raw scraping to embedded knowledge — BSE/NSE filings, news, social media. Turning messy real-world data into clean, queryable, AI-ready structures at scale.</div>
+        </div>
+        <div class="dright">
+          <div class="dtags"><span class="dtag">PostgreSQL</span><span class="dtag">Pandas</span><span class="dtag">Scraping</span><span class="dtag">FastAPI</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── SKILLS ── -->
+<section class="sec skills-sec" id="skills">
+  <div class="si">
+    <div class="slabel r">Technical Depth</div>
+    <h2 class="stitle r d1">The stack behind<br>the <em>ideas.</em></h2>
+    <div class="slayout">
+      <div class="r">
+        <p class="sintro">I care deeply about <em>choosing the right tool</em>, not the shiniest one. Every technology I've picked up has been to solve a specific, real constraint — latency, retrieval quality, reasoning accuracy, or scale.</p>
+        <div class="sbars" id="SB">
+          <div class="sbar"><div class="sbar-h"><span>LLM Engineering</span><span>95%</span></div><div class="sbar-t"><div class="sbar-f" data-w="95"></div></div></div>
+          <div class="sbar"><div class="sbar-h"><span>RAG & Vector Retrieval</span><span>92%</span></div><div class="sbar-t"><div class="sbar-f" data-w="92"></div></div></div>
+          <div class="sbar"><div class="sbar-h"><span>Python & ML</span><span>93%</span></div><div class="sbar-t"><div class="sbar-f" data-w="93"></div></div></div>
+          <div class="sbar"><div class="sbar-h"><span>Quantitative Finance</span><span>88%</span></div><div class="sbar-t"><div class="sbar-f" data-w="88"></div></div></div>
+          <div class="sbar"><div class="sbar-h"><span>Fine-Tuning (LoRA/PEFT)</span><span>84%</span></div><div class="sbar-t"><div class="sbar-f" data-w="84"></div></div></div>
+          <div class="sbar"><div class="sbar-h"><span>Data Engineering</span><span>86%</span></div><div class="sbar-t"><div class="sbar-f" data-w="86"></div></div></div>
+        </div>
+      </div>
+      <div class="sright r d2">
+        <div class="scb"><div class="scb-l">AI / LLM</div><div class="scb-items"><span class="scb-i">RAG (Hybrid · Graph · PageIndex)</span><span class="scb-i">Agentic AI · Multi-Agent</span><span class="scb-i">Prompt Engineering</span><span class="scb-i">Knowledge Graphs</span><span class="scb-i">Ollama · LangChain · LlamaIndex</span></div></div>
+        <div class="scb"><div class="scb-l">Fine-Tuning</div><div class="scb-items"><span class="scb-i">LoRA · QLoRA · PEFT</span><span class="scb-i">Unsloth · HuggingFace</span><span class="scb-i">Function Calling</span><span class="scb-i">Multimodal AI</span></div></div>
+        <div class="scb"><div class="scb-l">ML / Data</div><div class="scb-items"><span class="scb-i">Scikit-learn · TF · PyTorch</span><span class="scb-i">Time Series · Anomaly Detection</span><span class="scb-i">FAISS · Pinecone · pgVector</span><span class="scb-i">PostgreSQL · Pandas · NumPy</span></div></div>
+        <div class="scb"><div class="scb-l">Tools & MLOps</div><div class="scb-items"><span class="scb-i">FastAPI · Streamlit · Docker</span><span class="scb-i">GitHub Actions · AWS</span><span class="scb-i">Power BI · Git</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ABOUT ── -->
+<section class="sec about-sec" id="about">
+  <div class="si">
+    <div class="slabel r">About Me</div>
+    <h2 class="stitle r d1">The person behind<br>the <em>models.</em></h2>
+    <div class="alayout">
+      <div class="atext r d1">
+        <p>I'm Prasanna — an <strong>AI Engineer from Chennai</strong> with a background in Electrical Engineering and an obsession with applied intelligence. I graduated from KIOT Salem with an 8.52 CGPA, but my real education has been in production: building systems that break, learning why, and making them unbreakable.</p>
+        <p>I believe the most important quality in any AI engineer isn't knowing every model — it's understanding <strong>what problems are worth solving</strong>. That north star has led me to financial intelligence, autonomous agents, and retrieval systems that actually work under pressure.</p>
+        <p>Outside of code, I'm drawn to understanding how <strong>markets think</strong>, how language carries meaning across cultures, and how to build things that last longer than the hype cycle.</p>
+      </div>
+      <div>
+        <div class="irows r d2">
+          <div class="irow"><div class="ik">Based in</div><div class="iv">Chennai, Tamil Nadu, India</div></div>
+          <div class="irow"><div class="ik">Currently</div><div class="iv">AI Engineer @ Xerago</div></div>
+          <div class="irow"><div class="ik">Education</div><div class="iv">B.E. EEE — KIOT Salem · CGPA 8.52</div></div>
+          <div class="irow"><div class="ik">Certified</div><div class="iv">ML Engineer · Google Data Analytics</div></div>
+          <div class="irow"><div class="ik">Recognized</div><div class="iv">IBM Hack Finalist · Virtusa National Qualifier</div></div>
+          <div class="irow"><div class="ik">Contact</div><div class="iv">prasannasekaran2002@gmail.com</div></div>
+        </div>
+        <div class="sstrip r d3">
+          <div class="scell"><div class="sn">4500<span style="font-size:1.2rem;color:var(--muted)">+</span></div><div class="sl">Companies Screened</div></div>
+          <div class="scell"><div class="sn">200<span style="font-size:1.2rem;color:var(--muted)">+</span></div><div class="sl">Stocks · Live ML</div></div>
+          <div class="scell"><div class="sn">6</div><div class="sl">RAG Architectures</div></div>
+          <div class="scell"><div class="sn">∞</div><div class="sl">Problems to Solve</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Experience -->
+    <div style="margin-top:80px">
+      <div class="slabel r" style="margin-bottom:26px">Experience</div>
+      <div class="etl">
+        <div class="eblock r">
+          <div class="el"><div class="ep">Mar 2025 — Present</div><div class="eco">Xerago</div></div>
+          <div class="er">
+            <div class="erole">AI Engineer</div>
+            <div class="etag">Financial Intelligence & Autonomous AI Systems · Chennai</div>
+            <div class="epills">
+              <span class="epill">LLM Pipelines</span><span class="epill">Graph RAG</span><span class="epill">Agentic Systems</span><span class="epill">Quant Trading</span><span class="epill">BSE/NSE Scraping</span><span class="epill">Financial Chatbot</span><span class="epill">Multi-Agent LLM</span>
+            </div>
+          </div>
+        </div>
+        <div class="eblock r d1">
+          <div class="el"><div class="ep">Aug 2024 — Jan 2025</div><div class="eco">VTS Enterprises</div></div>
+          <div class="er">
+            <div class="erole">Junior Software Engineer – ML</div>
+            <div class="etag">Route Optimization & Predictive Analytics · Chennai</div>
+            <div class="epills">
+              <span class="epill">Dijkstra's Algo</span><span class="epill">K-Means Clustering</span><span class="epill">TomTom API</span><span class="epill">TensorFlow</span><span class="epill">Google Analytics</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section class="sec csec" id="contact">
+  <div class="cbg">BUILD</div>
+  <div class="slabel r">Get In Touch</div>
+  <h2 class="stitle r d1">Have a problem<br>worth <em>solving?</em></h2>
+  <div class="cgrid r d2">
+
+    <a href="mailto:prasannasekaran2002@gmail.com" class="clink clink-icon" title="prasannasekaran2002@gmail.com">
+      <!-- Gmail / Email -->
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+        <polyline points="22,6 12,13 2,6"/>
+      </svg>
+    </a>
+
+    <a href="https://linkedin.com/in/prasanna-sekaran-e-573635229" target="_blank" rel="noopener" class="clink clink-icon" title="LinkedIn">
+      <!-- LinkedIn -->
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+        <rect x="2" y="9" width="4" height="12"/>
+        <circle cx="4" cy="4" r="2"/>
+      </svg>
+    </a>
+
+    <a href="https://github.com/PrasannaSekaran" target="_blank" rel="noopener" class="clink clink-icon" title="GitHub">
+      <!-- GitHub -->
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+      </svg>
+    </a>
+
+    <a href="tel:+917339185630" class="clink clink-icon" title="+91 73391 85630">
+      <!-- Phone -->
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.18h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91A16 16 0 0 0 15 16.91l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+      </svg>
+    </a>
+
+  </div>
+</section>
+
+<footer>
+  <span>© 2026 Prasanna Sekaran <span class="fd">·</span> AI Engineer</span>
+  <span>Chennai, Tamil Nadu <span class="fd">·</span> India</span>
+  <span>Built with intent <span class="fd">✦</span></span>
+</footer>
+
+<script>
+// ── CURSOR ──
+const cur = document.getElementById('cur');
+const curArr = document.getElementById('cur-arr');
+let mx = window.innerWidth/2, my = window.innerHeight/2;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cur.style.left = mx + 'px';
+  cur.style.top = my + 'px';
+  curArr.style.left = mx + 'px';
+  curArr.style.top = my + 'px';
+});
+document.querySelectorAll('a,.pcard,.ditem,.eblock,.scell,.scb,.clink,.btn').forEach(el => {
+  el.addEventListener('mouseenter', () => { cur.classList.add('big'); curArr.classList.add('show'); curArr.textContent = '→'; });
+  el.addEventListener('mouseleave', () => { cur.classList.remove('big'); curArr.classList.remove('show'); });
+});
+
+// ── NAV ──
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('ink', window.scrollY > 50), {passive:true});
+
+// ── HERO REVEAL ──
+setTimeout(() => ['HN','HR','HP','HC','SH'].forEach(id => document.getElementById(id)?.classList.add('up')), 80);
+
+// ── SCROLL REVEALS ──
+const rObs = new IntersectionObserver(entries => entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('on'); }), {threshold:.12});
+document.querySelectorAll('.r,.slabel,.stitle').forEach(el => rObs.observe(el));
+
+// ── SKILL BARS ──
+const bObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.sbar-f').forEach((b,i) => setTimeout(()=>{ b.style.width = b.dataset.w+'%'; }, i*130));
+      bObs.unobserve(e.target);
+    }
+  });
+},{threshold:.3});
+const sb = document.getElementById('SB');
+if(sb) bObs.observe(sb);
+
+// ── SPINE TICKS ──
+const secs = ['passion','domains','skills','about','contact'];
+const tks = [0,1,2,3,4].map(i => document.getElementById('t'+i));
+function updateTicks(){
+  const mid = window.scrollY + window.innerHeight * .5;
+  secs.forEach((id,i) => {
+    const el = document.getElementById(id);
+    if(!el || !tks[i]) return;
+    tks[i].classList.toggle('lit', mid >= el.offsetTop && mid < el.offsetTop + el.offsetHeight);
+  });
+}
+window.addEventListener('scroll', updateTicks, {passive:true});
+updateTicks();
+
+// ── SPINE BEAD — scroll-locked, constant visual speed ──
+// The bead moves through the spine at a fixed pixels-per-second rate
+// regardless of how fast the user scrolls. We use requestAnimationFrame
+// and track a "target" position derived from scroll progress, then lerp
+// toward it at a fixed speed cap.
+
+const spineBead = document.getElementById('spine-bead');
+const spineGlow = document.getElementById('spine-glow');
+const spine = document.getElementById('spine');
+
+let beadPct = 0;      // 0–100, current rendered position %
+let beadTarget = 0;   // 0–100, where scroll wants the bead to be
+const MAX_SPEED = 0.25; // max % per frame (~15 units/s at 60fps)
+
+function getScrollPct(){
+  const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  return maxScroll > 0 ? (window.scrollY / maxScroll) * 100 : 0;
+}
+
+window.addEventListener('scroll', () => {
+  beadTarget = getScrollPct();
+}, {passive:true});
+
+function animSpine(){
+  // Move bead toward target but cap the step size
+  const diff = beadTarget - beadPct;
+  const step = Math.sign(diff) * Math.min(Math.abs(diff), MAX_SPEED);
+  beadPct += step;
+  beadPct = Math.max(0, Math.min(100, beadPct));
+
+  // Convert % to px within the spine height
+  const spineH = spine.offsetHeight;
+  const px = (beadPct / 100) * spineH;
+
+  spineBead.style.top = px + 'px';
+  // Glow is offset so center aligns with bead
+  spineGlow.style.top = (px - 45) + 'px';
+
+  requestAnimationFrame(animSpine);
+}
+requestAnimationFrame(animSpine);
+
+// ── HERO TITLE 3D TILT ──
+const HN = document.getElementById('HN');
+HN.addEventListener('mousemove', function(e){
+  const r = this.getBoundingClientRect();
+  const x = (e.clientX - r.left) / r.width - 0.5;
+  const y = (e.clientY - r.top) / r.height - 0.5;
+  this.style.transform = `perspective(900px) rotateY(${x*4}deg) rotateX(${-y*4}deg)`;
+});
+HN.addEventListener('mouseleave', function(){ this.style.transform = ''; });
+
+
+</script>
+</body>
+</html>
