@@ -209,6 +209,18 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .clink-icon{padding:20px;width:64px;height:64px;border-radius:50%;}
 .clink-icon:hover{border-color:var(--accent);color:var(--accent);background:rgba(200,245,66,.06);transform:translateY(-4px);box-shadow:0 8px 24px rgba(200,245,66,.12);}
 
+/* ── CERTIFICATIONS ── */
+.cert-grid{margin-top:26px;display:grid;grid-template-columns:1fr 1fr;gap:3px;}
+.cert-card{padding:26px 30px;background:var(--bg);border:1px solid var(--border);transition:border-color .3s;position:relative;cursor:none;}
+.cert-card:hover{border-color:rgba(200,245,66,.32);}
+.cert-card.wide{grid-column:1/-1;}
+.cert-top{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.cert-ico{width:22px;height:22px;color:var(--accent);flex-shrink:0;}
+.cert-issuer{font-family:'Fraunces',serif;font-weight:800;font-size:1rem;}
+.cert-items{display:flex;flex-wrap:wrap;gap:7px;}
+.cert-i{padding:4px 11px;border:1px solid var(--border);font-size:.56rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);transition:all .2s;}
+.cert-card:hover .cert-i{border-color:rgba(200,245,66,.22);color:var(--text);}
+
 /* ── FOOTER ── */
 footer{border-top:1px solid var(--border);padding:22px 80px;display:flex;justify-content:space-between;align-items:center;font-size:.56rem;letter-spacing:.1em;color:var(--muted);}
 .fd{color:var(--accent);}
@@ -388,6 +400,35 @@ footer{border-top:1px solid var(--border);padding:22px 80px;display:flex;justify
         </div>
         <div class="dright">
           <div class="dtags"><span class="dtag">Multi-Agent</span><span class="dtag">Tool Use</span><span class="dtag">Ollama</span><span class="dtag">LangChain</span><span class="dtag">LlamaIndex</span></div>
+          <!-- mini multi-agent orchestration SVG -->
+          <svg class="candle-mini" viewBox="0 0 220 72" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="cg1" width="20" height="20" patternUnits="userSpaceOnUse">
+                <path d="M20 0L0 0 0 20" fill="none" stroke="rgba(200,245,66,0.07)" stroke-width="0.5"/>
+              </pattern>
+              <marker id="ah1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                <path d="M0 0L10 5L0 10z" fill="rgba(200,245,66,0.6)"/>
+              </marker>
+            </defs>
+            <rect width="220" height="72" fill="url(#cg1)"/>
+            <!-- connecting lines: orchestrator -> agents -->
+            <line x1="103" y1="30" x2="52" y2="16" stroke="rgba(200,245,66,0.5)" stroke-width="0.8" marker-end="url(#ah1)"/>
+            <line x1="103" y1="38" x2="52" y2="52" stroke="rgba(200,245,66,0.5)" stroke-width="0.8" marker-end="url(#ah1)"/>
+            <line x1="118" y1="34" x2="172" y2="34" stroke="rgba(200,245,66,0.5)" stroke-width="0.8" marker-end="url(#ah1)"/>
+            <!-- agent -> tool ticks -->
+            <line x1="40" y1="16" x2="18" y2="10" stroke="rgba(237,233,222,0.25)" stroke-width="0.7"/>
+            <line x1="40" y1="52" x2="18" y2="58" stroke="rgba(237,233,222,0.25)" stroke-width="0.7"/>
+            <line x1="184" y1="34" x2="204" y2="34" stroke="rgba(237,233,222,0.25)" stroke-width="0.7"/>
+            <!-- orchestrator node -->
+            <circle cx="110" cy="34" r="9" fill="#04040a" stroke="#c8f542" stroke-width="1.4"/>
+            <circle cx="110" cy="34" r="3" fill="#c8f542"/>
+            <!-- agent nodes -->
+            <circle cx="42" cy="16" r="6" fill="#04040a" stroke="#c8f542" stroke-width="1"/>
+            <circle cx="42" cy="52" r="6" fill="#04040a" stroke="#c8f542" stroke-width="1"/>
+            <circle cx="184" cy="34" r="6" fill="#04040a" stroke="#c8f542" stroke-width="1"/>
+            <!-- label -->
+            <text x="10" y="71" font-size="5.5" fill="rgba(200,245,66,0.5)" font-family="DM Mono, monospace" letter-spacing="0.08em">MULTI-AGENT ORCHESTRATION</text>
+          </svg>
         </div>
       </div>
 
@@ -399,6 +440,41 @@ footer{border-top:1px solid var(--border);padding:22px 80px;display:flex;justify
         </div>
         <div class="dright">
           <div class="dtags"><span class="dtag">pgVector</span><span class="dtag">FAISS</span><span class="dtag">Pinecone</span><span class="dtag">Hybrid RAG</span><span class="dtag">Graph RAG</span></div>
+          <!-- mini hybrid vector + graph retrieval SVG -->
+          <svg class="candle-mini" viewBox="0 0 220 72" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="cg2" width="20" height="20" patternUnits="userSpaceOnUse">
+                <path d="M20 0L0 0 0 20" fill="none" stroke="rgba(200,245,66,0.07)" stroke-width="0.5"/>
+              </pattern>
+              <marker id="ah2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+                <path d="M0 0L10 5L0 10z" fill="rgba(200,245,66,0.6)"/>
+              </marker>
+            </defs>
+            <rect width="220" height="72" fill="url(#cg2)"/>
+            <!-- doc source -->
+            <rect x="10" y="24" width="18" height="24" rx="1.5" fill="#04040a" stroke="rgba(237,233,222,0.4)" stroke-width="1"/>
+            <line x1="14" y1="30" x2="24" y2="30" stroke="rgba(237,233,222,0.35)" stroke-width="0.8"/>
+            <line x1="14" y1="35" x2="24" y2="35" stroke="rgba(237,233,222,0.35)" stroke-width="0.8"/>
+            <line x1="14" y1="40" x2="20" y2="40" stroke="rgba(237,233,222,0.35)" stroke-width="0.8"/>
+            <!-- graph of embedding nodes -->
+            <line x1="90" y1="20" x2="115" y2="30" stroke="rgba(200,245,66,0.35)" stroke-width="0.7"/>
+            <line x1="90" y1="20" x2="88" y2="45" stroke="rgba(200,245,66,0.35)" stroke-width="0.7"/>
+            <line x1="115" y1="30" x2="88" y2="45" stroke="rgba(200,245,66,0.35)" stroke-width="0.7"/>
+            <line x1="115" y1="30" x2="130" y2="50" stroke="rgba(200,245,66,0.35)" stroke-width="0.7"/>
+            <line x1="88" y1="45" x2="130" y2="50" stroke="rgba(200,245,66,0.35)" stroke-width="0.7"/>
+            <circle cx="90" cy="20" r="4" fill="#c8f542" opacity="0.85"/>
+            <circle cx="115" cy="30" r="4" fill="#c8f542" opacity="0.85"/>
+            <circle cx="88" cy="45" r="4" fill="#c8f542" opacity="0.85"/>
+            <circle cx="130" cy="50" r="4" fill="#c8f542" opacity="0.85"/>
+            <!-- retrieval path to LLM -->
+            <line x1="30" y1="34" x2="82" y2="30" stroke="rgba(237,233,222,0.25)" stroke-width="0.8"/>
+            <line x1="134" y1="45" x2="182" y2="36" stroke="#c8f542" stroke-width="1" marker-end="url(#ah2)"/>
+            <!-- LLM node -->
+            <rect x="184" y="24" width="24" height="24" rx="3" fill="#04040a" stroke="#c8f542" stroke-width="1.3"/>
+            <text x="188" y="39" font-size="6.5" fill="#c8f542" font-family="DM Mono, monospace">LLM</text>
+            <!-- label -->
+            <text x="10" y="71" font-size="5.5" fill="rgba(200,245,66,0.5)" font-family="DM Mono, monospace" letter-spacing="0.08em">HYBRID VECTOR + GRAPH RETRIEVAL</text>
+          </svg>
         </div>
       </div>
 
@@ -410,8 +486,34 @@ footer{border-top:1px solid var(--border);padding:22px 80px;display:flex;justify
         </div>
         <div class="dright">
           <div class="dtags"><span class="dtag">LoRA</span><span class="dtag">QLoRA</span><span class="dtag">PEFT</span><span class="dtag">Unsloth</span><span class="dtag">HuggingFace</span></div>
+          <!-- mini before/after adaptation bar chart SVG -->
+          <svg class="candle-mini" viewBox="0 0 220 72" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="cg3" width="20" height="20" patternUnits="userSpaceOnUse">
+                <path d="M20 0L0 0 0 20" fill="none" stroke="rgba(200,245,66,0.07)" stroke-width="0.5"/>
+              </pattern>
+            </defs>
+            <rect width="220" height="72" fill="url(#cg3)"/>
+            <line x1="10" y1="58" x2="210" y2="58" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+            <!-- BASE group (muted) -->
+            <rect x="24" y="38" width="14" height="20" fill="rgba(237,233,222,0.22)" rx="1"/>
+            <rect x="44" y="30" width="14" height="28" fill="rgba(237,233,222,0.22)" rx="1"/>
+            <rect x="64" y="42" width="14" height="16" fill="rgba(237,233,222,0.22)" rx="1"/>
+            <text x="24" y="67" font-size="5" fill="rgba(237,233,222,0.4)" font-family="DM Mono, monospace" letter-spacing="0.06em">BASE</text>
+            <!-- TUNED group (accent, taller = better) -->
+            <rect x="120" y="20" width="14" height="38" fill="#c8f542" opacity="0.9" rx="1"/>
+            <rect x="140" y="10" width="14" height="48" fill="#c8f542" opacity="0.9" rx="1"/>
+            <rect x="160" y="16" width="14" height="42" fill="#c8f542" opacity="0.9" rx="1"/>
+            <text x="120" y="67" font-size="5" fill="rgba(200,245,66,0.6)" font-family="DM Mono, monospace" letter-spacing="0.06em">TUNED</text>
+            <!-- gain arrow -->
+            <line x1="82" y1="34" x2="112" y2="24" stroke="#c8f542" stroke-width="0.9"/>
+            <polygon points="112,24 106,25 109,29" fill="#c8f542"/>
+            <!-- label -->
+            <text x="10" y="8" font-size="5.5" fill="rgba(200,245,66,0.5)" font-family="DM Mono, monospace" letter-spacing="0.08em">LoRA / QLoRA ADAPTATION GAIN</text>
+          </svg>
         </div>
       </div>
+
 
       <!-- QUANT — has candlestick visual -->
       <div class="ditem r d2">
@@ -425,11 +527,11 @@ footer{border-top:1px solid var(--border);padding:22px 80px;display:flex;justify
           <!-- mini candlestick SVG -->
           <svg class="candle-mini" viewBox="0 0 220 72" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <pattern id="cg" width="20" height="20" patternUnits="userSpaceOnUse">
+              <pattern id="cg4" width="20" height="20" patternUnits="userSpaceOnUse">
                 <path d="M20 0L0 0 0 20" fill="none" stroke="rgba(200,245,66,0.07)" stroke-width="0.5"/>
               </pattern>
             </defs>
-            <rect width="220" height="72" fill="url(#cg)"/>
+            <rect width="220" height="72" fill="url(#cg4)"/>
             <!-- axis -->
             <line x1="10" y1="65" x2="210" y2="65" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
 
@@ -485,6 +587,26 @@ footer{border-top:1px solid var(--border);padding:22px 80px;display:flex;justify
         </div>
         <div class="dright">
           <div class="dtags"><span class="dtag">Scikit-learn</span><span class="dtag">TensorFlow</span><span class="dtag">PyTorch</span><span class="dtag">Time Series</span></div>
+          <!-- mini forecast vs actual line chart SVG -->
+          <svg class="candle-mini" viewBox="0 0 220 72" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="cg5" width="20" height="20" patternUnits="userSpaceOnUse">
+                <path d="M20 0L0 0 0 20" fill="none" stroke="rgba(200,245,66,0.07)" stroke-width="0.5"/>
+              </pattern>
+            </defs>
+            <rect width="220" height="72" fill="url(#cg5)"/>
+            <line x1="10" y1="58" x2="210" y2="58" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/>
+            <!-- confidence band for forecast -->
+            <polygon points="130,40 150,28 170,22 195,14 195,32 170,40 150,46 130,52" fill="rgba(200,245,66,0.1)"/>
+            <!-- actual data (muted, solid) -->
+            <polyline points="14,50 34,44 54,48 74,38 94,42 114,32 130,40" fill="none" stroke="rgba(237,233,222,0.55)" stroke-width="1.2"/>
+            <circle cx="130" cy="40" r="2.2" fill="rgba(237,233,222,0.6)"/>
+            <!-- forecast data (accent, dashed) -->
+            <polyline points="130,40 150,28 170,22 195,14" fill="none" stroke="#c8f542" stroke-width="1.3" stroke-dasharray="4 3"/>
+            <circle cx="195" cy="14" r="2.6" fill="#c8f542"/>
+            <!-- label -->
+            <text x="10" y="71" font-size="5.5" fill="rgba(200,245,66,0.5)" font-family="DM Mono, monospace" letter-spacing="0.08em">FORECAST vs ACTUAL</text>
+          </svg>
         </div>
       </div>
 
@@ -496,6 +618,35 @@ footer{border-top:1px solid var(--border);padding:22px 80px;display:flex;justify
         </div>
         <div class="dright">
           <div class="dtags"><span class="dtag">PostgreSQL</span><span class="dtag">Pandas</span><span class="dtag">Scraping</span><span class="dtag">FastAPI</span></div>
+          <!-- mini ETL pipeline flow SVG -->
+          <svg class="candle-mini" viewBox="0 0 220 72" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="cg6" width="20" height="20" patternUnits="userSpaceOnUse">
+                <path d="M20 0L0 0 0 20" fill="none" stroke="rgba(200,245,66,0.07)" stroke-width="0.5"/>
+              </pattern>
+              <marker id="ah6" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="4.5" markerHeight="4.5" orient="auto-start-reverse">
+                <path d="M0 0L10 5L0 10z" fill="rgba(200,245,66,0.6)"/>
+              </marker>
+            </defs>
+            <rect width="220" height="72" fill="url(#cg6)"/>
+            <!-- pipeline stages -->
+            <rect x="10" y="24" width="38" height="24" rx="2" fill="#04040a" stroke="rgba(237,233,222,0.4)" stroke-width="1"/>
+            <text x="16" y="39" font-size="6" fill="rgba(237,233,222,0.6)" font-family="DM Mono, monospace" letter-spacing="0.04em">RAW</text>
+            <line x1="50" y1="36" x2="66" y2="36" stroke="#c8f542" stroke-width="1" marker-end="url(#ah6)"/>
+
+            <rect x="70" y="24" width="42" height="24" rx="2" fill="#04040a" stroke="rgba(237,233,222,0.4)" stroke-width="1"/>
+            <text x="76" y="39" font-size="6" fill="rgba(237,233,222,0.6)" font-family="DM Mono, monospace" letter-spacing="0.04em">CLEAN</text>
+            <line x1="114" y1="36" x2="130" y2="36" stroke="#c8f542" stroke-width="1" marker-end="url(#ah6)"/>
+
+            <rect x="134" y="24" width="42" height="24" rx="2" fill="#04040a" stroke="rgba(237,233,222,0.4)" stroke-width="1"/>
+            <text x="139" y="39" font-size="6" fill="rgba(237,233,222,0.6)" font-family="DM Mono, monospace" letter-spacing="0.04em">EMBED</text>
+            <line x1="178" y1="36" x2="192" y2="36" stroke="#c8f542" stroke-width="1" marker-end="url(#ah6)"/>
+
+            <circle cx="202" cy="36" r="10" fill="#04040a" stroke="#c8f542" stroke-width="1.4"/>
+            <circle cx="202" cy="36" r="3" fill="#c8f542"/>
+            <!-- label -->
+            <text x="10" y="66" font-size="5.5" fill="rgba(200,245,66,0.5)" font-family="DM Mono, monospace" letter-spacing="0.08em">ETL PIPELINE · REAL-TIME INGESTION</text>
+          </svg>
         </div>
       </div>
 
@@ -586,6 +737,80 @@ footer{border-top:1px solid var(--border);padding:22px 80px;display:flex;justify
       </div>
     </div>
 
+    <!-- Certifications -->
+    <div style="margin-top:80px">
+      <div class="slabel r" style="margin-bottom:26px">Certifications</div>
+      <div class="cert-grid">
+
+        <div class="cert-card wide r">
+          <div class="cert-top">
+            <svg class="cert-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="6"/><path d="M8.7 13.6 7 22l5-3 5 3-1.7-8.4"/>
+            </svg>
+            <div class="cert-issuer">Google Cloud</div>
+          </div>
+          <div class="cert-items">
+            <span class="cert-i">Introduction to Generative AI</span>
+            <span class="cert-i">Introduction to LLMs</span>
+            <span class="cert-i">Transformer Models &amp; BERT</span>
+            <span class="cert-i">Attention Mechanism</span>
+            <span class="cert-i">Encoder-Decoder Architecture</span>
+            <span class="cert-i">Responsible AI</span>
+          </div>
+        </div>
+
+        <div class="cert-card r d1">
+          <div class="cert-top">
+            <svg class="cert-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="6"/><path d="M8.7 13.6 7 22l5-3 5 3-1.7-8.4"/>
+            </svg>
+            <div class="cert-issuer">IBM SkillsBuild</div>
+          </div>
+          <div class="cert-items">
+            <span class="cert-i">Generative AI Fundamentals</span>
+            <span class="cert-i">Machine Learning Fundamentals</span>
+          </div>
+        </div>
+
+        <div class="cert-card r d1">
+          <div class="cert-top">
+            <svg class="cert-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="6"/><path d="M8.7 13.6 7 22l5-3 5 3-1.7-8.4"/>
+            </svg>
+            <div class="cert-issuer">Micro1</div>
+          </div>
+          <div class="cert-items">
+            <span class="cert-i">Certified Machine Learning Engineer</span>
+          </div>
+        </div>
+
+        <div class="cert-card r d1">
+          <div class="cert-top">
+            <svg class="cert-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="6"/><path d="M8.7 13.6 7 22l5-3 5 3-1.7-8.4"/>
+            </svg>
+            <div class="cert-issuer">Google</div>
+          </div>
+          <div class="cert-items">
+            <span class="cert-i">Data Analytics Professional Certificate</span>
+          </div>
+        </div>
+
+        <div class="cert-card r d1">
+          <div class="cert-top">
+            <svg class="cert-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="8" r="6"/><path d="M8.7 13.6 7 22l5-3 5 3-1.7-8.4"/>
+            </svg>
+            <div class="cert-issuer">SkillRack</div>
+          </div>
+          <div class="cert-items">
+            <span class="cert-i">Python 3.x Modules Certification</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -604,7 +829,7 @@ footer{border-top:1px solid var(--border);padding:22px 80px;display:flex;justify
       </svg>
     </a>
 
-    <a href="https://linkedin.com/in/prasanna-sekaran-e-573635229" target="_blank" rel="noopener" class="clink clink-icon" title="LinkedIn">
+    <a href="https://www.linkedin.com/in/prasanna-sekaran-e-573635229/" target="_blank" rel="noopener" class="clink clink-icon" title="LinkedIn">
       <!-- LinkedIn -->
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
         <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
