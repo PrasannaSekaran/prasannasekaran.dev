@@ -217,6 +217,34 @@ nav.hide{transform:translateY(-100%);}
 .avail i{width:8px;height:8px;border-radius:50%;background:#0f7b4f;animation:bk 2s ease-in-out infinite;}
 .cta-row{position:relative;z-index:1;margin-top:22px;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
 
+/* ── hero spotlight card ── */
+.hleft{max-width:420px;display:flex;flex-direction:column;gap:22px;}
+.askcard{display:block;width:min(400px,100%);text-decoration:none;color:var(--ink);background:var(--paper);border:1px solid var(--ink);box-shadow:7px 7px 0 var(--ink);padding:16px 18px 14px;position:relative;animation:acfloat 5s ease-in-out infinite;transition:box-shadow .35s var(--ease),background .35s;}
+@keyframes acfloat{50%{transform:translateY(-6px)}}
+.askcard:hover{box-shadow:11px 11px 0 var(--accent);background:#fff;animation-play-state:paused;}
+.askcard::before{content:'';position:absolute;inset:-7px;border:1px solid var(--accent);opacity:0;animation:acpulse 2.8s ease-out infinite;pointer-events:none;}
+@keyframes acpulse{0%{opacity:.8;transform:scale(1)}100%{opacity:0;transform:scale(1.07)}}
+.ac-top{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:.52rem;letter-spacing:.16em;text-transform:uppercase;}
+.ac-new{display:inline-flex;align-items:center;gap:7px;padding:3px 8px;background:var(--hl);border:1px solid var(--ink);}
+.ac-new i{width:6px;height:6px;border-radius:50%;background:var(--ink);animation:bk 1.4s ease-in-out infinite;}
+.ac-k{color:var(--muted);}
+.ac-main{display:grid;grid-template-columns:84px 1fr;gap:14px;align-items:center;margin-top:12px;}
+.ac-viz{width:84px;height:84px;}
+.ac-orb{transform-origin:42px 42px;animation:acspin 16s linear infinite;}
+@keyframes acspin{to{transform:rotate(360deg)}}
+.ac-fl line{stroke-dasharray:3 4;animation:acdash 1.2s linear infinite;}
+@keyframes acdash{to{stroke-dashoffset:-14}}
+.ac-t{font-family:'Fraunces',serif;font-weight:800;font-size:1.35rem;line-height:1.1;}
+.ac-q{margin-top:8px;min-height:3em;font-size:.68rem;line-height:1.5;color:var(--ink);}
+.ac-caret{display:inline-block;width:1px;height:1em;background:var(--ink);margin-left:2px;vertical-align:-.15em;animation:cb 1s steps(1) infinite;}
+.ac-go{margin-top:8px;display:flex;justify-content:space-between;font-size:.54rem;letter-spacing:.16em;text-transform:uppercase;border-top:1px dashed var(--faint);padding-top:10px;color:var(--muted);}
+.ac-go b{font-weight:400;color:var(--ink);transition:transform .35s var(--ease);}
+.askcard:hover .ac-go b{transform:translateX(6px);}
+.nl a.hot{color:var(--ink);}
+.nl a.hot::before{content:'';position:absolute;right:-12px;top:-4px;width:6px;height:6px;border-radius:50%;background:var(--hl);border:1px solid var(--ink);animation:bk 1.6s ease-in-out infinite;}
+@media (prefers-reduced-motion:reduce){.askcard,.ac-orb,.askcard::before{animation:none!important;}}
+@media(max-width:900px){.hleft{max-width:none;}.askcard{width:100%;}.hname{font-size:15vw;}.hname .mask{white-space:nowrap;}.hpos{font-size:.54rem;}}
+
 /* ── ASK MY GRAPH (RAG simulation) ── */
 .rag-sec{background:var(--paper);}
 .rag-sub{margin-top:22px;max-width:620px;font-size:.74rem;line-height:1.9;color:var(--muted);}
@@ -463,7 +491,7 @@ footer{border-top:1px solid var(--ink);padding:22px 64px;display:flex;justify-co
     <li><a href="#passion">Passion</a></li>
     <li><a href="#domains">Domains</a></li>
     <li><a href="#work">Work</a></li>
-    <li><a href="#rag">Ask Graph</a></li>
+    <li><a href="#rag" class="hot">Ask Graph</a></li>
     <li><a href="#lab">Agent Lab</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#about">About</a></li>
@@ -489,11 +517,28 @@ footer{border-top:1px solid var(--ink);padding:22px 64px;display:flex;justify-co
     <div class="hpos">Agentic AI × Finance · built to be trusted, not just demoed</div>
   </div>
   <div class="hfoot">
-    <p class="hpassion">I believe AI Agents are the next great leap — systems that <strong>think, plan, and act</strong> without hand-holding. My obsession is making that real, at scale, in finance and beyond.</p>
-    <div class="hcta">
-      <a href="mailto:prasannasekaran2002@gmail.com" class="btn fill" data-mag>Get in Touch</a>
-      <a href="#lab" class="btn" data-mag>Try the Agent Lab →</a>
+    <div class="hleft">
+      <p class="hpassion">I believe AI Agents are the next great leap, systems that <strong>think, plan, and act</strong> without hand-holding. My obsession is making that real, at scale, in finance and beyond.</p>
+      <div class="hcta">
+        <a href="mailto:prasannasekaran2002@gmail.com" class="btn fill" data-mag>Get in Touch</a>
+        <a href="#rag" class="btn" data-mag data-l="Ask my graph">Ask my graph ↓</a>
+      </div>
     </div>
+    <a href="#rag" class="askcard" id="askCard" data-l="Ask my graph" aria-label="Open the Ask My Graph demo">
+      <div class="ac-top"><span class="ac-new"><i></i>New · Live demo</span><span class="ac-k">RAG ↔ Graph RAG</span></div>
+      <div class="ac-main">
+        <svg class="ac-viz" viewBox="0 0 84 84" aria-hidden="true">
+          <circle cx="42" cy="42" r="36" fill="none" stroke="#14130f" stroke-opacity=".18" stroke-dasharray="2 4"/>
+          <g class="ac-orb">
+            <g stroke="#0f7b4f" stroke-width="1" class="ac-fl"><line x1="42" y1="42" x2="72" y2="42"/><line x1="42" y1="42" x2="51.3" y2="70.5"/><line x1="42" y1="42" x2="17.7" y2="59.6"/><line x1="42" y1="42" x2="17.7" y2="24.4"/><line x1="42" y1="42" x2="51.3" y2="13.5"/></g>
+            <g stroke="#14130f" stroke-width="1.2"><circle cx="72" cy="42" r="4.5" fill="#fbf9f4"/><circle cx="51.3" cy="70.5" r="4.5" fill="#0f7b4f"/><circle cx="17.7" cy="59.6" r="4.5" fill="#fbf9f4"/><circle cx="17.7" cy="24.4" r="4.5" fill="#c8f542"/><circle cx="51.3" cy="13.5" r="4.5" fill="#fbf9f4"/></g>
+          </g>
+          <circle cx="42" cy="42" r="9" fill="#c8f542" stroke="#14130f" stroke-width="1.5"/><circle cx="42" cy="42" r="2.6" fill="#14130f"/>
+        </svg>
+        <div><div class="ac-t">Ask my graph</div><div class="ac-q"><span id="acq"></span><i class="ac-caret"></i></div></div>
+      </div>
+      <div class="ac-go"><span>Watch retrieval think</span><b>Run it →</b></div>
+    </a>
   </div>
   <div class="scroll-h"><span>Scroll</span><div class="sp"></div></div>
 </section>
@@ -1136,7 +1181,7 @@ function tokTick(){
   for(const key in ea)ea[key]=lerp(ea[key],on.has(key)?1:0,.08);
 
   tok.style.transform=`translate(${st.x*innerWidth+(cx/innerWidth-.5)*30}px,${st.y*innerHeight+(cy/innerHeight-.5)*30}px)`;
-  tok.style.opacity=st.o.toFixed(3);
+  tok.style.opacity=(st.o*(innerWidth<900?.4:1)).toFixed(3);
   tc.style.transform=`scale(${st.s})`;
   tl.style.top=(150*st.s+10)+'px';
   const fg=mixc(INK,PAPER,st.dark), bg=mixc(PAPER,INK,st.dark);
@@ -1638,11 +1683,30 @@ function frame(now){
   if(hovCv&&hovId)moveTip();
 }
 requestAnimationFrame(frame);
+window.__ragGo=i=>{if(auto)setTimeout(()=>ask(PRE[i].q,i),950);else window.__ragNext=i;};
 
 new IntersectionObserver(es=>es.forEach(e=>{
   vis=e.isIntersecting;
-  if(e.isIntersecting&&e.intersectionRatio>.2&&!auto){auto=true;setTimeout(()=>{if(!run)ask(PRE[0].q,0);},700);}
+  if(e.isIntersecting&&e.intersectionRatio>.2&&!auto){auto=true;setTimeout(()=>{if(!run){const k=window.__ragNext!=null?window.__ragNext:0;window.__ragNext=null;ask(PRE[k].q,k);}},700);}
 }),{threshold:[0,.2]}).observe($('#rag'));
+})();
+
+/* ── hero spotlight card: typed sample questions, click runs one ── */
+(function(){
+  const el=$('#acq'),card=$('#askCard'); if(!el||!card)return;
+  const Qs=[['What have you built with Graph RAG?',0],['How do your agents decide BUY, SELL or HOLD?',2],['Why are you so focused on finance?',4],['What is your tech stack?',8]];
+  let qi=0,i=0,dir=1;
+  card.addEventListener('click',()=>{if(window.__ragGo)window.__ragGo(Qs[qi][1]);});
+  const bt=$$('a[data-l="Ask my graph"]');
+  bt.forEach(a=>{if(a!==card)a.addEventListener('click',()=>{if(window.__ragGo)window.__ragGo(0);});});
+  if(reduce){el.textContent=Qs[0][0];return;}
+  (function tick(){
+    const q=Qs[qi][0];
+    if(dir>0){i++;el.textContent=q.slice(0,i);if(i>=q.length){dir=-1;return setTimeout(tick,2000);}return setTimeout(tick,40);}
+    i=Math.max(0,i-2);el.textContent=q.slice(0,i);
+    if(i===0){dir=1;qi=(qi+1)%Qs.length;return setTimeout(tick,380);}
+    setTimeout(tick,18);
+  })();
 })();
 
 })();
